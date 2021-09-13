@@ -7,22 +7,26 @@ const MultipleReturns = () => {
   const [user, setUser] = useState("default user");
 
   useEffect(() => {
-    fetch(url)
-      .then((response) => {
-        if (response.status >= 200 && response.status <= 299)
-          return response.json();
-        else {
+    async function fetchData() {
+      try {
+        const response = await fetch(url);
+        console.log("response :", response);
+
+        if (response.status >= 200 && response.status <= 299) {
+          var user = await response.json();
+          const { login } = user;
+          setUser(login);
+          setLoading(false);
+        } else {
           setLoading(false);
           setIsError(true);
           throw new Error(response.statusText);
         }
-      })
-      .then((user) => {
-        const { login } = user;
-        setUser(login);
-        setLoading(false);
-      })
-      .catch((error) => console.log("error :", error));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
   }, []);
 
   if (loading)
