@@ -6,7 +6,25 @@ import { data } from "../../../data";
 const Index = () => {
   const [name, setName] = useState("");
 
-  const reducer = (state, action) => {};
+  const reducer = (state, action) => {
+    if (action.type === "ADD_ITEM") {
+      const newPerson = [...state.people, action.payload];
+      return {
+        ...state,
+        people: newPerson,
+        isModalOpen: true,
+        modalContent: "item added",
+      };
+    }
+
+    if ((action.type = "NO_VALUE")) {
+      return {
+        ...state,
+        showModal: true,
+        modalContent: "Please enter a value",
+      };
+    }
+  };
   const [state, dispatch] = useReducer(reducer, {
     people: [],
     isModalOpen: false,
@@ -16,7 +34,11 @@ const Index = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (name) {
+      const newPerson = { id: new Date().getTime().toString(), name };
+      dispatch({ type: "ADD_ITEM", payload: newPerson });
+      setName("");
     } else {
+      dispatch({ type: "NO_VALUE" });
     }
   };
 
