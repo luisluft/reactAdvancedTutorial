@@ -5,23 +5,24 @@ import { data } from "../../../data";
 
 const Index = () => {
   const [name, setName] = useState("");
-  const [people, setPeople] = useState(data);
-  const [showModal, setShowModal] = useState(false);
+
+  const reducer = (state, action) => {};
+  const [state, dispatch] = useReducer(reducer, {
+    people: [],
+    isModalOpen: false,
+    modalContent: "",
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (name) {
-      setShowModal(true);
-      setPeople([...people, { id: new Date().getTime().toString(), name }]);
-      setName("");
     } else {
-      setShowModal(true);
     }
   };
 
   return (
     <>
-      {showModal && <Modal />}
+      {state.isModalOpen && <Modal modalContent={state.modalContent} />}
       <form onSubmit={handleSubmit} className="form">
         <div>
           <input
@@ -33,7 +34,7 @@ const Index = () => {
         <button type="submit">add</button>
       </form>
 
-      {people.map((person) => {
+      {state.people.map((person) => {
         return (
           <div key={person.id}>
             <h4>{person.name}</h4>
